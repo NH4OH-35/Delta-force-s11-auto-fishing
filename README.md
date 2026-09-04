@@ -52,16 +52,20 @@ bite_clean_10.5_to_12.wav
 
 ## 如何启动
 
-第一次运行前，请确认电脑已经安装 Python 3。
+### 用户需要安装什么
 
-1. 找到 `start_fishing_bot.bat`。
-2. 右键点击该文件。
-3. 选择 **以管理员身份运行**。
-4. Windows 弹出权限提示时选择“是”。
-5. 程序显示声音设备列表后，通常直接按 `Enter` 使用推荐设备即可。
-6. 再按一次 `Enter`，然后在 5 秒倒计时内切换回游戏。
+运行本程序需要：
 
-启动文件会自动检查并安装以下 Python 组件：
+- Windows 10 或 Windows 11。
+- 64 位 Python 3。
+- 首次启动时需要连接网络，以便下载程序依赖。
+- Delta Force 游戏本体。
+
+安装 Python 时，请勾选安装程序底部的 **Add Python to PATH**（把 Python 添加到系统路径）。建议同时保留 Python Launcher（`py`）。
+
+用户不需要安装 Git、GitHub Desktop 或 Razer 软件。下载 GitHub 仓库的 ZIP 文件并完整解压即可。
+
+`start_fishing_bot.bat` 会自动检查并安装以下 Python 组件：
 
 ```text
 soundcard
@@ -69,6 +73,23 @@ numpy
 scipy
 keyboard
 ```
+
+如果自动安装失败，可以打开 PowerShell，手动运行：
+
+```powershell
+py -m pip install soundcard numpy scipy keyboard
+```
+
+如果系统提示找不到 `py`，请重新安装 Python，并确认已经勾选 **Add Python to PATH**。
+
+### 启动步骤
+
+1. 找到 `start_fishing_bot.bat`。
+2. 右键点击该文件。
+3. 选择 **以管理员身份运行**。
+4. Windows 弹出权限提示时选择“是”。
+5. 程序显示声音设备列表后，通常直接按 `Enter` 使用推荐设备即可。
+6. 再按一次 `Enter`，然后在 5 秒倒计时内切换回游戏。
 
 ## 无法操作时怎么办
 
