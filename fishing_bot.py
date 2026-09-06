@@ -2,10 +2,12 @@
 
 Cycle:
     press the configured action key to cast
+    wait 1.5 seconds and press the action key again
     ignore audio for 5 seconds
     listen for bite sound until 20 seconds after casting
-    press the action key immediately on a bite, or at the 20-second timeout
-    wait a random 10-15 seconds for the animation
+    wait a random 0.214-0.578 seconds after a bite, then press the action key
+    press the action key at the 20-second timeout if there is no bite
+    wait a random 7-9 seconds for the animation
     repeat
 
 Press F8 at any time to stop.
@@ -32,15 +34,16 @@ SAMPLE_RATE = 48_000
 BLOCK_SIZE = 1_024
 IGNORE_AFTER_CAST_SECONDS = 5.0
 MAX_CAST_SECONDS = 20.0
-ANIMATION_WAIT_MIN_SECONDS = 10.0
-ANIMATION_WAIT_MAX_SECONDS = 15.0
+ANIMATION_WAIT_MIN_SECONDS = 7.0
+ANIMATION_WAIT_MAX_SECONDS = 9.0
 MATCH_THRESHOLD = 0.58
 START_COUNTDOWN_SECONDS = 5
 STOP_KEY = "f8"
 ACTION_KEY = "f6"
 ACTION_KEY_HOLD_SECONDS = 0.12
 BITE_REACTION_DELAY_MIN_SECONDS = 0.214
-BITE_REACTION_DELAY_MAX_SECONDS = 1.11
+BITE_REACTION_DELAY_MAX_SECONDS = 0.578
+SECOND_CAST_PRESS_DELAY_SECONDS = 1.5
 
 
 def stop_requested() -> bool:
@@ -68,40 +71,44 @@ def press_fishing_action():
 
 def choose_loopback_device():
     default_speaker = sc.default_speaker()
-    loopbacks = [
-        device
-        for device in sc.all_microphones(include_loopback=True)
-        if getattr(device, "isloopback", False)
-    ]
-
-    if not loopbacks:
-        return sc.get_microphone(
-            id=str(default_speaker.name),
-            include_loopback=True,
-        )
-
+    speakers = sc.all_speakers()
     print(f"Windows 当前默认播放设备：{default_speaker.name}")
-    print("可用的系统输出录音设备：")
-    for index, device in enumerate(loopbacks, start=1):
-        print(f"  {index}. {device.name}")
+    print("可用的 Windows 播放设备：")
+    for index, speaker in enumerate(speakers, start=1):
+        default_mark = " [默认]" if speaker.id == default_speaker.id else ""
+        print(f"  {index}. {speaker.name}{default_mark}")
 
-    matching = [
-        device
-        for device in loopbacks
-        if device.name == default_speaker.name
-        or default_speaker.name in device.name
-        or device.name in default_speaker.name
-    ]
-    recommended = loopbacks.index(matching[0]) + 1 if matching else 1
-    answer = input(f"输入设备编号，直接按 Enter 使用推荐设备 [{recommended}]：").strip()
-
-    if not answer:
-        return loopbacks[recommended - 1]
+    recommended = next(
+        (
+            index
+            for index, speaker in enumerate(speakers, start=1)
+            if speaker.id == default_speaker.id
+        ),
+        1,
+    )
+    answer = input(
+        f"输入游戏使用的设备 A 编号，直接按 Enter 使用 [{recommended}]："
+    ).strip()
 
     try:
-        return loopbacks[int(answer) - 1]
+        selected_index = recommended if not answer else int(answer)
+        selected_speaker = speakers[selected_index - 1]
     except (ValueError, IndexError):
         raise RuntimeError("设备编号无效。")
+
+    try:
+        loopback = sc.get_microphone(
+            id=selected_speaker.id,
+            include_loopback=True,
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            f"无法打开设备 A 的 loopback：{selected_speaker.name}"
+        ) from exc
+
+    print(f"已严格监听设备 A：{selected_speaker.name}")
+    print(f"设备 A 端点 ID：{selected_speaker.id}")
+    return loopback
 
 
 def load_template(path: Path):
@@ -226,6 +233,11 @@ def run_bot():
     while not stop_requested():
         cycle += 1
         print(f"\n第 {cycle} 轮：按 {ACTION_KEY.upper()} 抛竿。")
+        press_fishing_action()
+
+        print(f"等待 {SECOND_CAST_PRESS_DELAY_SECONDS:.1f} 秒后再次按 {ACTION_KEY.upper()}。")
+        if not wait_interruptibly(SECOND_CAST_PRESS_DELAY_SECONDS):
+            break
         press_fishing_action()
         cast_time = time.monotonic()
 
