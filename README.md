@@ -1,5 +1,7 @@
 # Fishing Assistant v3
 
+https://github.com/NH4OH-35/Delta-force-s11-auto-fishing/releases/tag/v3.0.0
+
 Windows 图形界面版。按页面顺序设置：**① 设备与按键 → ② 钓鱼流程 → ③ 声音确认与重置**。
 
 请仅在游戏规则允许自动化的情况下使用；使用者自行承担账号限制或处罚风险。
