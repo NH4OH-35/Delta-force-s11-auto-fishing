@@ -1,6 +1,6 @@
-# Fishing Assistant v3
+# 自动钓鱼v4
 
-https://github.com/NH4OH-35/Delta-force-s11-auto-fishing/releases/tag/v3.0.0
+https://github.com/NH4OH-35/Delta-force-s11-auto-fishing/releases/tag/V4
 
 Windows 图形界面版。按页面顺序设置：**① 设备与按键 → ② 钓鱼流程 → ③ 声音确认与重置**。
 
@@ -9,7 +9,7 @@ Windows 图形界面版。按页面顺序设置：**① 设备与按键 → ② 
 ## 启动
 
 1. 解压 Windows 发布包。
-2. 双击 **`FishingAssistantV3.exe`**。此版本自带运行环境和三个声音模板，**不需要安装 Python 或依赖组件**。
+2. 双击 **`V3.exe`**。此版本自带运行环境和三个声音模板，**不需要安装 Python 或依赖组件**。
 3. 未获得管理员权限时，先提示“未以管理员身份运行”。点击“确定”后请求 Windows 管理员权限；取消则退出，不会运行钓鱼。仍然只有 GUI，没有常驻命令行窗口。
 4. 选择与游戏一致的 Windows 输出设备。
 5. 游戏中保留鼠标左键，并把 F6 添加为射击的第二按键。先手动测试 F6 能抛竿、收竿。
@@ -19,7 +19,6 @@ Windows 图形界面版。按页面顺序设置：**① 设备与按键 → ② 
 
 ## 使用体验
 
-- 底部署名：**Created by Nh & GPT-6 Astra**。
 - 日志可以缩放：上下拖动设置区与日志区之间的分隔条，也可调整整个窗口大小。默认日志区更大。
 - “测试声音 · 5 秒”：只录音，不发送按键；观察下方输入音量，确认所选设备有声音。音量条不是咬钩相似度。
 - 运行或测试期间锁定设置；停止后可修改。保存成功显示在窗口内，不再弹出确认对话框。
@@ -98,7 +97,7 @@ Windows 图形界面版。按页面顺序设置：**① 设备与按键 → ② 
 ## Windows 发布包
 
 ```text
-FishingAssistantV3.exe
+V4.exe
 README_GUI.md
 THIRD_PARTY_LICENSES/
 ```
